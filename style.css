@@ -78,9 +78,213 @@ body {
 }
 
 .goal-list {
+    margin: 0 auto;
     margin-top: 20px;
     background-color: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 700px;
+    max-width: 90%;
 }
+
+.goal-list h3 {
+    text-align: center;
+    font-size: 1.5em;
+    color: #333;
+}
+
+
+.goal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    margin: 8px 0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    transition: all 0.3s ease;
+}
+
+.goal-item:hover {
+    background: #e9ecef;
+    transform: translateX(4px);
+}
+
+.goal-text {
+    flex: 1;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Delete button styling */
+.delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Input group styles */
+.input-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.goal-input:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Goal card styles */
+.goal-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px auto;
+    border-left: 5px solid #667eea;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.goal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+}
+
+.goal-card-content {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.4;
+    flex: 1;
+    margin-right: 20px;
+}
+        
+.goal-card button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 auto;
+    margin-right: 12px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.goal-card button:first-of-type {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.goal-card button:first-of-type:hover {
+    background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.goal-card button:last-of-type {
+    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+    color: white;
+}
+
+.goal-card button:last-of-type:hover {
+    background: linear-gradient(135deg, #c82333 0%, #e55a00 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Button container for better organization */
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Success button (I did it) */
+.success-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.success-btn:hover {
+    background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* Fail button (I failed) */
+.fail-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+    color: white;
+}
+
+.fail-btn:hover {
+    background: linear-gradient(135deg, #c82333 0%, #e55a00 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Dare complete button */
+.dare-complete-btn {
+    background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+    color: white;
+}
+
+.dare-complete-btn:hover {
+    background: linear-gradient(135deg, #5a32a3 0%, #d63384 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(111, 66, 193, 0.3);
+}
+
+/* Dare text styling */
+.dare-text {
+    font-size: 14px;
+    color: #dc3545;
+    font-weight: 600;
+    background: rgba(220, 53, 69, 0.1);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border-left: 3px solid #dc3545;
+}
+
+/* Completed text styling */
+.completed-text {
+    font-size: 14px;
+    color: #28a745;
+    font-weight: 600;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border-left: 3px solid #28a745;
+}
+
