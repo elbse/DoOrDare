@@ -16,26 +16,34 @@ console.log('Elements found:', {
 let streak = 0;
 let goals = [];
 let dares = [
-    "Do 20 jumping jacks",
-    "Sing your favorite song out loud",
-    "Do 10 push-ups",
-    "Dance for 30 seconds",
-    "Tell a joke to someone",
-    "Do 15 squats",
-    "Take a cold shower for 1 minute",
-    "Do 5 burpees",
-    "Meditate for 5 minutes",
-    "Do 20 sit-ups",
-    "Run in place for 1 minute",
-    "Do 10 lunges",
-    "Hold a plank for 30 seconds",
-    "Do 10 mountain climbers",
-    "Stretch for 5 minutes",
-    "Do 15 jumping jacks",
-    "Do 10 tricep dips",
-    "Do 20 high knees",
-    "Do 10 butt kicks",
-    "Do 15 arm circles"
+    "Do 20 jumping jacks while shouting a motivational phrase!",
+    "Perform your favorite song as if you're on stage at a concert! ",
+    "Do 10 push-ups and yell \"I won’t quit!\" after each one.",
+    "Dance like no one’s watching — full power for 30 seconds! ",
+    "Tell a cringe dad joke to someone, then rate their reaction.",
+    "Take a 1-minute cold shower and scream “I love discipline!” ",
+    "Do 5 burpees and clap over your head each time you jump.",
+    "Meditate in complete silence... or in plank position (your choice).",
+    "Do 20 sit-ups while naming 5 people who inspire you.",
+    "Run in place for 1 minute and pretend you're being chased by zombies! ",
+    "Do walking lunges across your room while chanting “I’ve got this!",
+    "Hold a 30s plank while smiling the whole time",
+    "10 mountain climbers while imagining you're on a volcano",
+    "Stretch like you're preparing for a dance battle.",
+    "Do 15 jumping jacks while spelling your name out loud!",
+    "Do 10 tricep dips with a clap at the end if you're a beast.",
+    "Do 20 high knees like you're sprinting to save the world!",
+    "Do 10 butt kicks while singing a line of any song.",
+    "Do 15 arm circles and then strike a superhero pose!",
+    "Run around your house/apartment like you're late for a flight.",
+    "Make a 15-second motivational speech like you're Tony Robbins.",
+    "Do 10 wall sits while naming 10 countries.",
+    "Do 10 star jumps while reciting the alphabet backwards.",
+    "Say your goal out loud in front of a mirror. Loud and proud.", 
+    "Balance on one foot for 1 minute while clapping."
+
+
+    
 ];
 
 // Load data from localStorage
