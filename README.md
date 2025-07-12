@@ -13,7 +13,6 @@ A simple and fun **web app** that helps you stay accountable to your daily goals
 ## 🖼️ Preview
 
 ![Screenshot 1](./images/ss1.png)
-![Screenshot 2](./images/ss2.png)
 
 ## 🛠️ Tech Stack
 
