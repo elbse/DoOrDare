@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="script.js">
+
+    <title>Do or Dare</title>
+</head>
+<body>
+    <div class="head">
+        <h1>Dare or Discipline</h1>
+    </div>
+
+    <div class="container">
+        <div class="streak" id="streakcounter">
+            <h3> Streaks: 0 days</h3>
+         </div>
+    </div>
+
+    <div class="card goal-input-section" id="goalInputSection">
+        <div class="input-group">
+                <input 
+                    type="text" 
+                    class="goal-input" 
+                    id="goalInput" 
+                    placeholder="Enter your goal for today"
+                    maxlength="100"
+                >
+                <button class="btn btn-primary" id="setGoalBtn">Set Goal</button>
+
+                
+            </div>
+
+    </div>
+
+    <div class="goal-list" id="goalList">
+        <ul></ul>
+    </div>
+
+</body>
+</html>
