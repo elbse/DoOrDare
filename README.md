@@ -21,7 +21,7 @@ A simple and fun **web app** that helps you stay accountable to your daily goals
 
 - HTML5
 - CSS3 (with Google Fonts)
-- Vanilla JavaScript
+- JavaScript
 
 ## 📂 How to Use
 
