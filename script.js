@@ -191,6 +191,7 @@ function markGoalComplete(index) {
     renderGoals();
 }
 
+//ahhhhh
 // Mark goal as failed
 function markGoalFailed(index) {
     goals[index].status = 'failed';
