@@ -12,7 +12,10 @@ A simple and fun **web app** that helps you stay accountable to your daily goals
 
 ## 🖼️ Preview
 
-![Screenshot 1](./images/ss1.png)
+<p align="center">
+  <img src="./images/ss1.png" alt="Screenshot 1" width="45%" />
+  <img src="./images/ss2.png" alt="Screenshot 2" width="45%" />
+</p>
 
 ## 🛠️ Tech Stack
 
