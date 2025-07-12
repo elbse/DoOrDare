@@ -12,9 +12,8 @@ A simple and fun **web app** that helps you stay accountable to your daily goals
 
 ## 🖼️ Preview
 
- <!-- Replace wi<img width="1919" height="946" alt="Screenshot 2025-07-12 141934" src="https://github.com/user-attachments/assets/d45a056e-5e33-46f7-9158-1d737e20a5e8" />
-<img width="1919" height="945" alt="Screenshot 2025-07-12 141942" src="https://github.com/user-attachments/assets/a7ac47df-38a2-47cd-a1b1-941fe505d580" />
-th actual screenshot path -->
+![Screenshot 1](./images/ss1.png)
+![Screenshot 2](./images/ss2.png)
 
 ## 🛠️ Tech Stack
 
