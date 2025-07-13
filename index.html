@@ -3,41 +3,538 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoOrDare - Productivity & Accountability Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    
-
-    <title>Do or Dare</title>
 </head>
 <body>
-    <div class="head">
-        <h1>Dare or Discipline</h1>
+
+    <div class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <!-- Logo -->
+                <div class="sidebar-header">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="6"/>
+                                <circle cx="12" cy="12" r="2"/>
+                            </svg>
+                        </div>
+                        <div class="logo-text">
+                            <h1>DoOrDare</h1>
+                            <p>Stay Accountable</p>
+                        </div>
+                    </div>
+                </div>
     </div>
 
-    <div class="container">
-        <div class="streak" id="streakcounter">
-            <h3> Streaks: 0 days</h3>
-         </div>
-    </div>
+    <nav class="sidebar-nav">
+                    <button class="nav-item active" data-tab="dashboard">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9,22 9,12 15,12 15,22"/>
+                        </svg>
+                        Dashboard
+                    </button>
+                    <button class="nav-item" data-tab="my-goals">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="6"/>
+                            <circle cx="12" cy="12" r="2"/>
+                        </svg>
+                        My Goals
+                    </button>
+                    <button class="nav-item" data-tab="add-goal">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                        Add Goal
+                    </button>
+                    <button class="nav-item" data-tab="dares">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                        </svg>
+                        Dares
+                    </button>
+                    <button class="nav-item" data-tab="settings">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+                        </svg>
+                        Settings
+                    </button>
+                </nav>
 
-    <div class="card goal-input-section" id="goalInputSection">
-        <div class="input-group">
-                <input 
-                    type="text" 
-                    class="goal-input" 
-                    id="goalInput" 
-                    placeholder="Enter your goal for today"
-                    maxlength="100"
-                >
-                <button class="btn btn-primary" id="setGoalBtn">Set Goal</button>
+                 <div class="sidebar-footer">
+                    <div class="user-profile">
+                        <div class="user-avatar">AC</div>
+                        <div class="user-info">
+                            <p class="user-name">Alex Chen</p>
+                            <p class="user-email">alex@example.com</p>
+                        </div>
+                        <button class="logout-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                <polyline points="16,17 21,12 16,7"/>
+                                <line x1="21" y1="12" x2="9" y2="12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                
+        <div class="main-content">
+            <!-- Mobile Header -->
+            <div class="mobile-header">
+                <h1>DoOrDare</h1>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
             </div>
 
+             <main class="page-content">
+                <!-- Dashboard View -->
+                <div class="view active" id="dashboard-view">
+                    <div class="page-header">
+                        <div class="header-content">
+                            <h1 class="page-title">TheGoalGetters</h1>
+                            <p class="page-subtitle">Stay accountable together 💪</p>
+                        </div>
+                        <div class="header-actions">
+                            <div class="search-container">
+                                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="m21 21-4.35-4.35"/>
+                                </svg>
+                                <input type="text" placeholder="Search goals or members..." class="search-input" id="searchInput">
+                            </div>
+                            <button class="btn btn-primary" onclick="showView('add-goal')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="16"/>
+                                    <line x1="8" y1="12" x2="16" y2="12"/>
+                                </svg>
+                                Add Goal
+                            </button>
+                        </div>
+                    </div>
+
+
+
+<div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-content">
+                                <div class="stat-info">
+                                    <p class="stat-label">Total Members</p>
+                                    <p class="stat-value">4</p>
+                                </div>
+                                <svg class="stat-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-content">
+                                <div class="stat-info">
+                                    <p class="stat-label">Avg. Completion</p>
+                                    <p class="stat-value">75%</p>
+                                </div>
+                                <svg class="stat-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-card purple">
+                            <div class="stat-content">
+                                <div class="stat-info">
+                                    <p class="stat-label">Total Goals</p>
+                                    <p class="stat-value">12</p>
+                                </div>
+                                <svg class="stat-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <circle cx="12" cy="12" r="6"/>
+                                    <circle cx="12" cy="12" r="2"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-card orange">
+                            <div class="stat-content">
+                                <div class="stat-info">
+                                    <p class="stat-label">Active Dares</p>
+                                    <p class="stat-value">3</p>
+                                </div>
+                                <svg class="stat-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Members Grid -->
+                    <div class="members-grid" id="membersGrid">
+                        <!-- Members will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- My Goals View -->
+                <div class="view" id="my-goals-view">
+                    <div class="page-header">
+                        <div class="header-content">
+                            <h1 class="page-title">My Goals</h1>
+                            <p class="page-subtitle">Track your personal progress</p>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn btn-primary" onclick="showView('add-goal')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="16"/>
+                                    <line x1="8" y1="12" x2="16" y2="12"/>
+                                </svg>
+                                Add Goal
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="my-goals-grid">
+                        <div class="goals-card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <circle cx="12" cy="12" r="6"/>
+                                        <circle cx="12" cy="12" r="2"/>
+                                    </svg>
+                                    Today's Goals
+                                </h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="goals-list" id="myGoalsList">
+                                    <!-- My goals will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Progress Overview</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="progress-overview">
+                                    <div class="progress-circle">
+                                        <div class="progress-value">67%</div>
+                                        <p class="progress-label">Completion Rate</p>
+                                    </div>
+                                    <div class="progress-details">
+                                        <div class="progress-stat">
+                                            <span>Completed</span>
+                                            <span class="progress-stat-value">2/3</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 67%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Goal View -->
+                <div class="view" id="add-goal-view">
+                    <div class="add-goal-container">
+                        <div class="page-header centered">
+                            <h1 class="page-title">Add New Goal</h1>
+                            <p class="page-subtitle">Set a goal and stay accountable</p>
+                        </div>
+
+                        <div class="add-goal-card">
+                            <form class="add-goal-form" id="addGoalForm">
+                                <div class="form-group">
+                                    <label for="goalDescription">Goal Description</label>
+                                    <textarea id="goalDescription" placeholder="What do you want to accomplish?" rows="4"></textarea>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="assignTo">Assign To</label>
+                                        <select id="assignTo">
+                                            <option value="self">Myself</option>
+                                            <option value="Alex Chen">Alex Chen</option>
+                                            <option value="Sarah Johnson">Sarah Johnson</option>
+                                            <option value="Mike Rodriguez">Mike Rodriguez</option>
+                                            <option value="Emma Wilson">Emma Wilson</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="goalCategory">Category</label>
+                                        <select id="goalCategory">
+                                            <option value="">Select category</option>
+                                            <option value="fitness">Fitness</option>
+                                            <option value="work">Work</option>
+                                            <option value="personal">Personal</option>
+                                            <option value="learning">Learning</option>
+                                            <option value="health">Health</option>
+                                            <option value="hobbies">Hobbies</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="showView('dashboard')">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <line x1="12" y1="8" x2="12" y2="16"/>
+                                            <line x1="8" y1="12" x2="16" y2="12"/>
+                                        </svg>
+                                        Add Goal
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dares View -->
+                <div class="view" id="dares-view">
+                    <div class="page-header">
+                        <div class="header-content">
+                            <h1 class="page-title">Dares</h1>
+                            <p class="page-subtitle">Fun consequences for missed goals</p>
+                        </div>
+                    </div>
+
+                    <div class="dares-grid">
+                        <div class="dares-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Active Dares</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="empty-state">
+                                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                                    </svg>
+                                    <h3>No Active Dares</h3>
+                                    <p>Complete your goals to avoid dares!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dare-stats-card">
+                            <div class="card-header">
+                                <h3 class="card-title orange">Dare Statistics</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="dare-stats">
+                                    <div class="dare-stat-circle">
+                                        <div class="dare-stat-value">3</div>
+                                        <p class="dare-stat-label">Dares This Week</p>
+                                    </div>
+                                    <div class="dare-progress">
+                                        <div class="dare-progress-stat">
+                                            <span>Completed</span>
+                                            <span class="dare-progress-value">2/3</span>
+                                        </div>
+                                        <div class="dare-progress-bar">
+                                            <div class="dare-progress-fill" style="width: 67%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings View -->
+                <div class="view" id="settings-view">
+                    <div class="page-header">
+                        <div class="header-content">
+                            <h1 class="page-title">Settings</h1>
+                            <p class="page-subtitle">Customize your experience</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Notifications</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="settings-list">
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <span class="setting-name">Push Notifications</span>
+                                            <p class="setting-description">Receive notifications for goal reminders</p>
+                                        </div>
+                                        <label class="toggle">
+                                            <input type="checkbox" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <span class="setting-name">Daily Reminders</span>
+                                            <p class="setting-description">Get reminded about your daily goals</p>
+                                        </div>
+                                        <label class="toggle">
+                                            <input type="checkbox">
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <span class="setting-name">Group Updates</span>
+                                            <p class="setting-description">Stay updated on group activities</p>
+                                        </div>
+                                        <label class="toggle">
+                                            <input type="checkbox" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Privacy</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="settings-list">
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <span class="setting-name">Share Progress</span>
+                                            <p class="setting-description">Allow others to see your progress</p>
+                                        </div>
+                                        <label class="toggle">
+                                            <input type="checkbox" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <span class="setting-name">Public Profile</span>
+                                            <p class="setting-description">Make your profile visible to others</p>
+                                        </div>
+                                        <label class="toggle">
+                                            <input type="checkbox">
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <span class="setting-name">Activity Status</span>
+                                            <p class="setting-description">Show when you're online</p>
+                                        </div>
+                                        <label class="toggle">
+                                            <input type="checkbox" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Mobile Bottom Navigation -->
+        <div class="mobile-nav">
+            <button class="mobile-nav-item active" data-tab="dashboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9,22 9,12 15,12 15,22"/>
+                </svg>
+                <span>Dashboard</span>
+            </button>
+            <button class="mobile-nav-item" data-tab="my-goals">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="6"/>
+                    <circle cx="12" cy="12" r="2"/>
+                </svg>
+                <span>My Goals</span>
+            </button>
+            <button class="mobile-nav-item" data-tab="add-goal">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+                <span>Add Goal</span>
+            </button>
+            <button class="mobile-nav-item" data-tab="dares">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                </svg>
+                <span>Dares</span>
+            </button>
+            <button class="mobile-nav-item" data-tab="settings">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+                </svg>
+                <span>Settings</span>
+            </button>
+        </div>
     </div>
 
-    <div class="goal-list" id="goalList">
-        <h3>Goals</h3>
+    <!-- Dare Modal -->
+    <div class="modal-overlay" id="dareModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                    </svg>
+                    Assign Dare
+                </h3>
+                <button class="modal-close" onclick="closeDareModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-content">
+                <p class="modal-description">
+                    Assign a fun dare to <span id="dareTargetName" class="font-semibold"></span> for not completing their goals!
+                </p>
+                <div class="form-group">
+                    <label for="dareSelect">Choose a Dare</label>
+                    <select id="dareSelect">
+                        <option value="">Select a dare...</option>
+                        <option value="Do 20 jumping jacks">Do 20 jumping jacks</option>
+                        <option value="Send a motivational message to the group">Send a motivational message to the group</option>
+                        <option value="Share an embarrassing childhood photo">Share an embarrassing childhood photo</option>
+                        <option value="Do a 1-minute plank">Do a 1-minute plank</option>
+                        <option value="Sing your favorite song (voice note)">Sing your favorite song (voice note)</option>
+                        <option value="Write a haiku about your failed goal">Write a haiku about your failed goal</option>
+                        <option value="Do 10 push-ups">Do 10 push-ups</option>
+                        <option value="Dance for 30 seconds (video proof)">Dance for 30 seconds (video proof)</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeDareModal()">Cancel</button>
+                    <button class="btn btn-danger" onclick="assignDare()">Assign Dare</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
