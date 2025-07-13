@@ -10,6 +10,7 @@ A simple and fun **web app** that helps you stay accountable to your daily goals
 - 🔁 Encourages consistency and builds discipline through accountability
 - 💅 Clean, minimal, mobile-friendly UI using HTML, CSS, and JavaScript
 
+
 ## ⚠️ Work in progress!!!
 
 ## 🛠️ Tech Stack
