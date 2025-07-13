@@ -26,8 +26,8 @@ const groupData = {
     },
     {
       id: 3,
-      name: "Mike Rodriguez",
-      initials: "MR",
+      name: "Jack Frost",
+      initials: "MR",   
       status: "away",
       goals: [
         { id: 7, text: "Go for evening run", completed: true, dueDate: "Today", category: "Fitness" },
