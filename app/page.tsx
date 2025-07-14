@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -38,145 +38,29 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 
-// Mock data
-const groupData = {
-  name: "TheGoalGetters",
-  members: [
-    {
-      id: 1,
-      name: "Alex Chen",
-      avatar: "/placeholder.svg?height=40&width=40",
-      initials: "AC",
-      status: "online",
-      goals: [
-        {
-          id: 1,
-          text: "Complete morning workout",
-          completed: true,
-          dueDate: "Today",
-          category: "Fitness",
-        },
-        {
-          id: 2,
-          text: "Read 30 pages of book",
-          completed: false,
-          dueDate: "Today",
-          category: "Learning",
-        },
-        {
-          id: 3,
-          text: "Meditate for 10 minutes",
-          completed: true,
-          dueDate: "Today",
-          category: "Wellness",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Sarah Johnson",
-      avatar: "/placeholder.svg?height=40&width=40",
-      initials: "SJ",
-      status: "online",
-      goals: [
-        {
-          id: 4,
-          text: "Drink 8 glasses of water",
-          completed: false,
-          dueDate: "Today",
-          category: "Health",
-        },
-        {
-          id: 5,
-          text: "Complete project proposal",
-          completed: true,
-          dueDate: "Today",
-          category: "Work",
-        },
-        {
-          id: 6,
-          text: "Call mom",
-          completed: false,
-          dueDate: "Today",
-          category: "Personal",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Mike Rodriguez",
-      avatar: "/placeholder.svg?height=40&width=40",
-      initials: "MR",
-      status: "away",
-      goals: [
-        {
-          id: 7,
-          text: "Go for evening run",
-          completed: true,
-          dueDate: "Today",
-          category: "Fitness",
-        },
-        {
-          id: 8,
-          text: "Prepare healthy lunch",
-          completed: true,
-          dueDate: "Today",
-          category: "Health",
-        },
-        {
-          id: 9,
-          text: "Practice guitar",
-          completed: false,
-          dueDate: "Today",
-          category: "Hobbies",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Emma Wilson",
-      avatar: "/placeholder.svg?height=40&width=40",
-      initials: "EW",
-      status: "offline",
-      goals: [
-        {
-          id: 10,
-          text: "Finish quarterly report",
-          completed: false,
-          dueDate: "Today",
-          category: "Work",
-        },
-        {
-          id: 11,
-          text: "Yoga session",
-          completed: true,
-          dueDate: "Today",
-          category: "Fitness",
-        },
-        {
-          id: 12,
-          text: "Plan weekend trip",
-          completed: false,
-          dueDate: "Today",
-          category: "Personal",
-        },
-      ],
-    },
-  ],
-};
+// Firebase imports
+import {
+  authService,
+  userService,
+  goalService,
+  groupService,
+  dareService,
+  statsService,
+} from "@/services/firebase";
+import AuthModal from "@/components/AuthModal";
 
 const dareOptions = [
   "Do 20 jumping jacks while shouting a motivational phrase!",
   "Perform your favorite song as if you're on stage at a concert! ",
-  'Do 10 push-ups and yell "I won’t quit!" after each one.',
-  "Dance like no one’s watching — full power for 30 seconds! ",
+  'Do 10 push-ups and yell "I won\'t quit!" after each one.',
+  "Dance like no one's watching — full power for 30 seconds! ",
   "Tell a cringe dad joke to someone, then rate their reaction.",
-  "Take a 1-minute cold shower and scream “I love discipline!” ",
+  'Take a 1-minute cold shower and scream "I love discipline!" ',
   "Do 5 burpees and clap over your head each time you jump.",
   "Meditate in complete silence... or in plank position (your choice).",
   "Do 20 sit-ups while naming 5 people who inspire you.",
   "Run in place for 1 minute and pretend you're being chased by zombies! ",
-  "Do walking lunges across your room while chanting “I’ve got this!",
+  "Do walking lunges across your room while chanting \"I've got this!",
   "Hold a 30s plank while smiling the whole time",
   "10 mountain climbers while imagining you're on a volcano",
   "Stretch like you're preparing for a dance battle.",
@@ -194,6 +78,12 @@ const dareOptions = [
 ];
 
 export default function DoOrDareWebApp() {
+  // Authentication state
+  const [user, setUser] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // App state
   const [activeTab, setActiveTab] = useState("dashboard");
   const [newGoal, setNewGoal] = useState("");
   const [assignTo, setAssignTo] = useState("self");
@@ -203,55 +93,164 @@ export default function DoOrDareWebApp() {
   const [showUserProfileModal, setShowUserProfileModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // User profile state
-  const [userProfile, setUserProfile] = useState({
-    name: "Alex Chen",
-    email: "alex@example.com",
-    age: 28,
-    avatar: "/placeholder.svg",
-    initials: "AC",
-    status: "online",
-    joinDate: "2024-01-15",
-    totalGoals: 47,
-    completedGoals: 32,
-    currentStreak: 5,
-    accountabilityPartners: [
-      { id: 2, name: "Sarah Johnson", status: "online" },
-      { id: 3, name: "Mike Rodriguez", status: "away" },
-      { id: 4, name: "Emma Wilson", status: "offline" },
-    ],
+  // Data state
+  const [userProfile, setUserProfile] = useState(null);
+  const [userGoals, setUserGoals] = useState([]);
+  const [groupMembers, setGroupMembers] = useState([]);
+  const [userDares, setUserDares] = useState([]);
+  const [groupData, setGroupData] = useState({
+    name: "TheGoalGetters",
+    members: [],
   });
 
+  // Edit profile state
   const [editingProfile, setEditingProfile] = useState({
-    name: userProfile.name,
-    email: userProfile.email,
-    age: userProfile.age,
+    name: "",
+    email: "",
+    age: 0,
   });
 
-  const handleAddGoal = () => {
-    if (newGoal.trim()) {
-      console.log("Adding goal:", newGoal, "to:", assignTo);
-      setNewGoal("");
-      setAssignTo("self");
+  // Listen to authentication state changes
+  useEffect(() => {
+    const unsubscribe = authService.onAuthStateChanged(async (authUser) => {
+      setUser(authUser);
+      setLoading(false);
+
+      if (authUser) {
+        // Load user profile and data
+        await loadUserData(authUser.uid);
+      } else {
+        // Clear data when user signs out
+        setUserProfile(null);
+        setUserGoals([]);
+        setGroupMembers([]);
+        setUserDares([]);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Load user data when authenticated
+  const loadUserData = async (userId) => {
+    try {
+      // Load user profile
+      const profile = await userService.getUserProfile(userId);
+      setUserProfile(profile);
+      setEditingProfile({
+        name: profile.name || "",
+        email: profile.email || "",
+        age: profile.age || 0,
+      });
+
+      // Load user goals
+      const goals = await goalService.getUserGoals(userId);
+      setUserGoals(goals);
+
+      // Load group members (assuming user is in a group)
+      const members = await groupService.getGroupMembers("default-group");
+      setGroupMembers(members);
+
+      // Load user dares
+      const dares = await dareService.getUserDares(userId);
+      setUserDares(dares);
+
+      // Update group data
+      setGroupData((prev) => ({
+        ...prev,
+        members: members,
+      }));
+    } catch (error) {
+      console.error("Error loading user data:", error);
+    }
+  };
+
+  // Handle sign out
+  const handleSignOut = async () => {
+    try {
+      await authService.signOut();
       setActiveTab("dashboard");
+    } catch (error) {
+      console.error("Error signing out:", error);
     }
   };
 
-  const handleAssignDare = () => {
-    if (selectedDare && dareTarget) {
-      console.log("Assigning dare:", selectedDare, "to:", dareTarget);
-      setShowDareModal(false);
-      setSelectedDare("");
-      setDareTarget("");
+  // Handle add goal
+  const handleAddGoal = async () => {
+    if (newGoal.trim() && user) {
+      try {
+        const goalData = {
+          text: newGoal,
+          category: "Personal",
+          dueDate: new Date().toDateString(),
+          assignedTo: assignTo === "self" ? user.uid : assignTo,
+        };
+
+        await goalService.createGoal(user.uid, goalData);
+        setNewGoal("");
+        setAssignTo("self");
+        setActiveTab("dashboard");
+      } catch (error) {
+        console.error("Error adding goal:", error);
+      }
     }
   };
 
-  const getCompletionRate = (member: any) => {
-    const completed = member.goals.filter((goal: any) => goal.completed).length;
-    return Math.round((completed / member.goals.length) * 100);
+  // Handle goal status update
+  const handleGoalStatusUpdate = async (goalId, status) => {
+    try {
+      await goalService.updateGoalStatus(goalId, status);
+
+      // Update streak if goal completed
+      if (status === "completed" && user) {
+        await statsService.updateUserStreak(user.uid);
+      }
+    } catch (error) {
+      console.error("Error updating goal status:", error);
+    }
   };
 
-  const getStatusColor = (status: string) => {
+  // Handle assign dare
+  const handleAssignDare = async () => {
+    if (selectedDare && dareTarget && user) {
+      try {
+        // Find target user ID from group members
+        const targetMember = groupMembers.find(
+          (member) => member.name === dareTarget
+        );
+        if (targetMember) {
+          await dareService.assignDare(user.uid, targetMember.id, selectedDare);
+          setShowDareModal(false);
+          setSelectedDare("");
+          setDareTarget("");
+        }
+      } catch (error) {
+        console.error("Error assigning dare:", error);
+      }
+    }
+  };
+
+  // Handle profile update
+  const handleProfileUpdate = async () => {
+    if (user) {
+      try {
+        await userService.updateUserProfile(user.uid, editingProfile);
+        setUserProfile((prev) => ({ ...prev, ...editingProfile }));
+        setShowUserProfileModal(false);
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
+    }
+  };
+
+  const getCompletionRate = (member) => {
+    const completed =
+      member.goals?.filter((goal) => goal.status === "completed").length || 0;
+    const total = member.goals?.length || 0;
+    return total > 0 ? Math.round((completed / total) * 100) : 0;
+  };
+
+  const getStatusColor = (status) => {
     switch (status) {
       case "online":
         return "bg-green-500";
@@ -261,6 +260,46 @@ export default function DoOrDareWebApp() {
         return "bg-gray-400";
     }
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show authentication modal if not logged in
+  if (!user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-purple-50 to-pink-50">
+        <div className="text-center space-y-6">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              DoOrDare
+            </h1>
+            <p className="text-gray-600">Stay accountable together 💪</p>
+          </div>
+          <Button
+            onClick={() => setShowAuthModal(true)}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+          >
+            Get Started
+          </Button>
+        </div>
+
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          onAuthSuccess={() => setShowAuthModal(false)}
+        />
+      </div>
+    );
+  }
 
   const renderDashboard = () => (
     <div className="space-y-8">
@@ -288,13 +327,6 @@ export default function DoOrDareWebApp() {
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Goal
-          </Button>
-          <Button
-            onClick={() => setActiveTab("add-goal")}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Person
           </Button>
         </div>
       </div>
@@ -867,18 +899,18 @@ export default function DoOrDareWebApp() {
               onClick={() => setShowUserProfileModal(true)}
             >
               <Avatar className="h-10 w-10">
-                <AvatarImage src={userProfile.avatar} />
+                <AvatarImage src={userProfile?.avatar} />
                 <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                  {userProfile.initials}
+                  {userProfile?.initials}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                  {userProfile.name}
+                  {userProfile?.name}
                 </p>
-                <p className="text-xs text-gray-500">{userProfile.email}</p>
+                <p className="text-xs text-gray-500">{userProfile?.email}</p>
               </div>
-              <Button size="sm" variant="ghost">
+              <Button size="sm" variant="ghost" onClick={handleSignOut}>
                 <LogOut className="h-4 w-4" />
               </Button>
             </div>
@@ -993,9 +1025,9 @@ export default function DoOrDareWebApp() {
           <DialogHeader>
             <DialogTitle className="flex items-center space-x-2">
               <Avatar className="h-8 w-8">
-                <AvatarImage src={userProfile.avatar} />
+                <AvatarImage src={userProfile?.avatar} />
                 <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                  {userProfile.initials}
+                  {userProfile?.initials}
                 </AvatarFallback>
               </Avatar>
               <span>User Profile</span>
@@ -1005,24 +1037,24 @@ export default function DoOrDareWebApp() {
             {/* Profile Header */}
             <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
               <Avatar className="h-16 w-16">
-                <AvatarImage src={userProfile.avatar} />
+                <AvatarImage src={userProfile?.avatar} />
                 <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xl">
-                  {userProfile.initials}
+                  {userProfile?.initials}
                 </AvatarFallback>
               </Avatar>
               <div>
                 <h3 className="text-xl font-bold text-gray-900">
-                  {userProfile.name}
+                  {userProfile?.name}
                 </h3>
-                <p className="text-gray-600">{userProfile.email}</p>
+                <p className="text-gray-600">{userProfile?.email}</p>
                 <div className="flex items-center space-x-2 mt-1">
                   <div
                     className={`w-2 h-2 rounded-full ${getStatusColor(
-                      userProfile.status
+                      userProfile?.status
                     )}`}
                   />
                   <span className="text-sm text-gray-500 capitalize">
-                    {userProfile.status}
+                    {userProfile?.status}
                   </span>
                 </div>
               </div>
@@ -1032,19 +1064,19 @@ export default function DoOrDareWebApp() {
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center p-4 bg-blue-50 rounded-lg">
                 <div className="text-2xl font-bold text-blue-600">
-                  {userProfile.totalGoals}
+                  {userProfile?.totalGoals}
                 </div>
                 <div className="text-sm text-gray-600">Total Goals</div>
               </div>
               <div className="text-center p-4 bg-green-50 rounded-lg">
                 <div className="text-2xl font-bold text-green-600">
-                  {userProfile.completedGoals}
+                  {userProfile?.completedGoals}
                 </div>
                 <div className="text-sm text-gray-600">Completed</div>
               </div>
               <div className="text-center p-4 bg-purple-50 rounded-lg">
                 <div className="text-2xl font-bold text-purple-600">
-                  {userProfile.currentStreak}
+                  {userProfile?.currentStreak}
                 </div>
                 <div className="text-sm text-gray-600">Day Streak</div>
               </div>
@@ -1106,7 +1138,7 @@ export default function DoOrDareWebApp() {
                     Join Date
                   </label>
                   <Input
-                    value={userProfile.joinDate}
+                    value={userProfile?.joinDate}
                     disabled
                     className="bg-gray-50"
                   />
@@ -1120,7 +1152,7 @@ export default function DoOrDareWebApp() {
                 Accountability Partners
               </h4>
               <div className="space-y-3">
-                {userProfile.accountabilityPartners.map((partner) => (
+                {userProfile?.accountabilityPartners?.map((partner) => (
                   <div
                     key={partner.id}
                     className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
@@ -1168,10 +1200,7 @@ export default function DoOrDareWebApp() {
                 Cancel
               </Button>
               <Button
-                onClick={() => {
-                  setUserProfile({ ...userProfile, ...editingProfile });
-                  setShowUserProfileModal(false);
-                }}
+                onClick={handleProfileUpdate}
                 className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
                 Save Changes
