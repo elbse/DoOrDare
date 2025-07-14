@@ -11,7 +11,7 @@ A simple and fun **web app** that helps you stay accountable to your daily goals
 - 💅 Clean, minimal, mobile-friendly UI using HTML, CSS, and JavaScript
 
 
-## ⚠️ Work in progress!!!
+## ⚠️ Work in progress!
 
 ## 🛠️ Tech Stack
 
