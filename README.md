@@ -2,7 +2,7 @@
 
 A simple and fun **web app** that helps you stay accountable to your daily goals. If you fail to complete a goal, the app challenges you with a **DARE** to make up for it — because growth comes from discomfort 💪.
 
-## ⚠️ Work in progress!
+## ⚠️ Work in progress!!
 
 ## 🚀 Features
 
