@@ -131,11 +131,64 @@ export default function DoOrDareWebApp() {
     return () => unsubscribe();
   }, []);
 
+  // Update profile with user data when user state changes
+  useEffect(() => {
+    if (user && userProfile) {
+      // Update profile with user data if profile is missing information
+      const updatedProfile = {
+        ...userProfile,
+        name:
+          userProfile.name ||
+          user.displayName ||
+          user.email?.split("@")[0] ||
+          "User",
+        email: userProfile.email || user.email || "",
+        initials:
+          userProfile.initials ||
+          (user.displayName || user.email?.split("@")[0] || "U")
+            .split(" ")
+            .map((name) => name.charAt(0).toUpperCase())
+            .join("")
+            .slice(0, 2),
+      };
+
+      if (
+        updatedProfile.name !== userProfile.name ||
+        updatedProfile.email !== userProfile.email ||
+        updatedProfile.initials !== userProfile.initials
+      ) {
+        console.log("Updating profile with user data:", updatedProfile);
+        setUserProfile(updatedProfile);
+        setEditingProfile({
+          name: updatedProfile.name || "",
+          email: updatedProfile.email || "",
+          age: updatedProfile.age || 0,
+        });
+      }
+    }
+  }, [user, userProfile]);
+
   // Load user data when authenticated
   const loadUserData = async (userId) => {
     try {
       // Load user profile
-      const profile = await userService.getUserProfile(userId);
+      let profile;
+      try {
+        profile = await userService.getUserProfile(userId);
+      } catch (error) {
+        // If profile doesn't exist, create a basic one from auth user data
+        // We'll use the user state that's already set in the auth state change
+        profile = {
+          name: "User", // Will be updated when user state is available
+          email: "",
+          initials: "U",
+          totalGoals: 0,
+          completedGoals: 0,
+          currentStreak: 0,
+          status: "online",
+        };
+      }
+
       setUserProfile(profile);
       setEditingProfile({
         name: profile.name || "",
@@ -538,7 +591,7 @@ export default function DoOrDareWebApp() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {groupData.members[0].goals.map((goal) => (
+              {groupData.members[0]?.goals?.map((goal) => (
                 <div
                   key={goal.id}
                   className="flex items-center space-x-4 p-4 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors"
@@ -901,14 +954,24 @@ export default function DoOrDareWebApp() {
               <Avatar className="h-10 w-10">
                 <AvatarImage src={userProfile?.avatar} />
                 <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                  {userProfile?.initials}
+                  {userProfile?.initials ||
+                    (user?.displayName || user?.email?.split("@")[0] || "U")
+                      .split(" ")
+                      .map((name) => name.charAt(0).toUpperCase())
+                      .join("")
+                      .slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                  {userProfile?.name}
+                  {userProfile?.name ||
+                    user?.displayName ||
+                    user?.email?.split("@")[0] ||
+                    "User"}
                 </p>
-                <p className="text-xs text-gray-500">{userProfile?.email}</p>
+                <p className="text-xs text-gray-500">
+                  {userProfile?.email || user?.email}
+                </p>
               </div>
               <Button size="sm" variant="ghost" onClick={handleSignOut}>
                 <LogOut className="h-4 w-4" />
@@ -1027,7 +1090,12 @@ export default function DoOrDareWebApp() {
               <Avatar className="h-8 w-8">
                 <AvatarImage src={userProfile?.avatar} />
                 <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                  {userProfile?.initials}
+                  {userProfile?.initials ||
+                    (user?.displayName || user?.email?.split("@")[0] || "U")
+                      .split(" ")
+                      .map((name) => name.charAt(0).toUpperCase())
+                      .join("")
+                      .slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
               <span>User Profile</span>
@@ -1039,14 +1107,24 @@ export default function DoOrDareWebApp() {
               <Avatar className="h-16 w-16">
                 <AvatarImage src={userProfile?.avatar} />
                 <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xl">
-                  {userProfile?.initials}
+                  {userProfile?.initials ||
+                    (user?.displayName || user?.email?.split("@")[0] || "U")
+                      .split(" ")
+                      .map((name) => name.charAt(0).toUpperCase())
+                      .join("")
+                      .slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
               <div>
                 <h3 className="text-xl font-bold text-gray-900">
-                  {userProfile?.name}
+                  {userProfile?.name ||
+                    user?.displayName ||
+                    user?.email?.split("@")[0] ||
+                    "User"}
                 </h3>
-                <p className="text-gray-600">{userProfile?.email}</p>
+                <p className="text-gray-600">
+                  {userProfile?.email || user?.email}
+                </p>
                 <div className="flex items-center space-x-2 mt-1">
                   <div
                     className={`w-2 h-2 rounded-full ${getStatusColor(
@@ -1090,32 +1168,20 @@ export default function DoOrDareWebApp() {
                   <label className="text-sm font-medium text-gray-700">
                     Name
                   </label>
-                  <Input
-                    value={editingProfile.name}
-                    onChange={(e) =>
-                      setEditingProfile({
-                        ...editingProfile,
-                        name: e.target.value,
-                      })
-                    }
-                    placeholder="Enter your name"
-                  />
+                  <div className="py-2 px-3 bg-gray-50 rounded text-gray-900">
+                    {userProfile?.name ||
+                      user?.displayName ||
+                      user?.email?.split("@")?.[0] ||
+                      "User"}
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Email
                   </label>
-                  <Input
-                    value={editingProfile.email}
-                    onChange={(e) =>
-                      setEditingProfile({
-                        ...editingProfile,
-                        email: e.target.value,
-                      })
-                    }
-                    placeholder="Enter your email"
-                    type="email"
-                  />
+                  <div className="py-2 px-3 bg-gray-50 rounded text-gray-900">
+                    {userProfile?.email || user?.email}
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">

@@ -39,7 +39,12 @@ export const authService = {
         totalGoals: 0,
         completedGoals: 0,
         currentStreak: 0,
-        status: 'online'
+        status: 'online',
+        initials: displayName
+          .split(' ')
+          .map(name => name.charAt(0).toUpperCase())
+          .join('')
+          .slice(0, 2)
       });
       
       return userCredential.user;
@@ -52,6 +57,28 @@ export const authService = {
   async signIn(email, password) {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      
+      // Ensure user profile exists in Firestore
+      try {
+        await this.createUserProfile(userCredential.user.uid, {
+          name: userCredential.user.displayName || userCredential.user.email?.split('@')[0] || 'User',
+          email: userCredential.user.email,
+          joinDate: new Date().toISOString(),
+          totalGoals: 0,
+          completedGoals: 0,
+          currentStreak: 0,
+          status: 'online',
+          initials: (userCredential.user.displayName || userCredential.user.email?.split('@')[0] || 'U')
+            .split(' ')
+            .map(name => name.charAt(0).toUpperCase())
+            .join('')
+            .slice(0, 2)
+        });
+      } catch (error) {
+        // Profile might already exist, which is fine
+        console.log('Profile creation skipped (likely already exists):', error.message);
+      }
+      
       return userCredential.user;
     } catch (error) {
       throw error;
@@ -82,7 +109,7 @@ export const userService = {
         ...userData,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
-      });
+      }, { merge: true }); // Use merge to avoid overwriting existing data
     } catch (error) {
       throw error;
     }
