@@ -24,3 +24,5 @@ A simple and fun **web app** that helps you stay accountable to your daily goals
 1. Clone or download this repository:
    ```bash
    git clone https://github.com/elbse/DoOrDare.git
+
+# Hope you like it.
