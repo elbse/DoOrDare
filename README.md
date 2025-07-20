@@ -25,4 +25,3 @@ A simple and fun **web app** that helps you stay accountable to your daily goals
    ```bash
    git clone https://github.com/elbse/DoOrDare.git
 
-# Hope you like it.
