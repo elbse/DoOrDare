@@ -259,7 +259,7 @@ export default function DoOrDareWebApp() {
         await statsService.updateUserStreak(user.uid);
       }
     } catch (error) {
-      console.error("Error updating goal status:", error);
+      console.error("Error updating the goal status:", error);
     }
   };
 
