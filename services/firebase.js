@@ -1,4 +1,4 @@
-import { 
+const { 
   collection, 
   doc, 
   setDoc, 
@@ -12,19 +12,19 @@ import {
   onSnapshot,
   addDoc,
   serverTimestamp 
-} from 'firebase/firestore';
-import { 
+} = require('firebase/firestore');
+const { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   signOut, 
   updateProfile,
   onAuthStateChanged 
-} from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { auth, db, storage } from '../firebase-config';
+} = require('firebase/auth');
+const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
+const { auth, db, storage } = require('../firebase-config');
 
 // User Authentication Services
-export const authService = {
+const authService = {
   // Sign up new user
   async signUp(email, password, displayName) {
     try {
@@ -101,7 +101,7 @@ export const authService = {
 };
 
 // User Profile Services
-export const userService = {
+const userService = {
   // Create user profile
   async createUserProfile(userId, userData) {
     try {
@@ -162,7 +162,7 @@ export const userService = {
 };
 
 // Goals Services
-export const goalService = {
+const goalService = {
   // Create new goal
   async createGoal(userId, goalData) {
     try {
@@ -255,7 +255,7 @@ export const goalService = {
 };
 
 // Groups and Accountability Partners Services
-export const groupService = {
+const groupService = {
   // Create group
   async createGroup(groupData) {
     try {
@@ -331,18 +331,24 @@ export const groupService = {
 };
 
 // Dares Services
-export const dareService = {
+const dareService = {
   // Assign dare to user
-  async assignDare(fromUserId, toUserId, dareText, groupId = null) {
+  async assignDare(fromUserId, toUserId, dareText, category = 'general', difficulty = 'medium', groupId = null) {
     try {
       const dareRef = await addDoc(collection(db, 'dares'), {
         fromUserId,
         toUserId,
         dareText,
+        category,
+        difficulty,
         groupId,
         status: 'assigned',
         assignedAt: serverTimestamp(),
-        completedAt: null
+        completedAt: null,
+        completed: false,
+        proof: null,
+        rating: null,
+        notes: null
       });
       
       return dareRef.id;
@@ -352,12 +358,31 @@ export const dareService = {
   },
 
   // Complete dare
-  async completeDare(dareId) {
+  async completeDare(dareId, proof = null, rating = null, notes = null) {
     try {
       const docRef = doc(db, 'dares', dareId);
       await updateDoc(docRef, {
         status: 'completed',
-        completedAt: serverTimestamp()
+        completed: true,
+        completedAt: serverTimestamp(),
+        proof,
+        rating,
+        notes
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Fail dare
+  async failDare(dareId, notes = null) {
+    try {
+      const docRef = doc(db, 'dares', dareId);
+      await updateDoc(docRef, {
+        status: 'failed',
+        completed: false,
+        failedAt: serverTimestamp(),
+        notes
       });
     } catch (error) {
       throw error;
@@ -365,7 +390,38 @@ export const dareService = {
   },
 
   // Get user dares
-  async getUserDares(userId) {
+  async getUserDares(userId, status = null) {
+    try {
+      let q = query(
+        collection(db, 'dares'),
+        where('toUserId', '==', userId),
+        orderBy('assignedAt', 'desc')
+      );
+      
+      if (status) {
+        q = query(
+          collection(db, 'dares'),
+          where('toUserId', '==', userId),
+          where('status', '==', status),
+          orderBy('assignedAt', 'desc')
+        );
+      }
+      
+      const querySnapshot = await getDocs(q);
+      const dares = [];
+      
+      querySnapshot.forEach((doc) => {
+        dares.push({ id: doc.id, ...doc.data() });
+      });
+      
+      return dares;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Get all user dares (for history)
+  async getUserDareHistory(userId) {
     try {
       const q = query(
         collection(db, 'dares'),
@@ -384,11 +440,126 @@ export const dareService = {
     } catch (error) {
       throw error;
     }
+  },
+
+  // Get dares by category
+  async getDaresByCategory(userId, category) {
+    try {
+      const q = query(
+        collection(db, 'dares'),
+        where('toUserId', '==', userId),
+        where('category', '==', category),
+        orderBy('assignedAt', 'desc')
+      );
+      
+      const querySnapshot = await getDocs(q);
+      const dares = [];
+      
+      querySnapshot.forEach((doc) => {
+        dares.push({ id: doc.id, ...doc.data() });
+      });
+      
+      return dares;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Get dares by difficulty
+  async getDaresByDifficulty(userId, difficulty) {
+    try {
+      const q = query(
+        collection(db, 'dares'),
+        where('toUserId', '==', userId),
+        where('difficulty', '==', difficulty),
+        orderBy('assignedAt', 'desc')
+      );
+      
+      const querySnapshot = await getDocs(q);
+      const dares = [];
+      
+      querySnapshot.forEach((doc) => {
+        dares.push({ id: doc.id, ...doc.data() });
+      });
+      
+      return dares;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Update dare status
+  async updateDareStatus(dareId, status, updates = {}) {
+    try {
+      const docRef = doc(db, 'dares', dareId);
+      const updateData = {
+        status,
+        updatedAt: serverTimestamp(),
+        ...updates
+      };
+      
+      if (status === 'completed') {
+        updateData.completedAt = serverTimestamp();
+        updateData.completed = true;
+      } else if (status === 'failed') {
+        updateData.failedAt = serverTimestamp();
+        updateData.completed = false;
+      }
+      
+      await updateDoc(docRef, updateData);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Get dare statistics
+  async getDareStats(userId) {
+    try {
+      const dares = await this.getUserDareHistory(userId);
+      
+      const totalDares = dares.length;
+      const completedDares = dares.filter(dare => dare.status === 'completed').length;
+      const failedDares = dares.filter(dare => dare.status === 'failed').length;
+      const pendingDares = dares.filter(dare => dare.status === 'assigned').length;
+      
+      const categoryStats = {};
+      const difficultyStats = {};
+      
+      dares.forEach(dare => {
+        // Category stats
+        if (!categoryStats[dare.category]) {
+          categoryStats[dare.category] = { total: 0, completed: 0, failed: 0 };
+        }
+        categoryStats[dare.category].total++;
+        if (dare.status === 'completed') categoryStats[dare.category].completed++;
+        if (dare.status === 'failed') categoryStats[dare.category].failed++;
+        
+        // Difficulty stats
+        if (!difficultyStats[dare.difficulty]) {
+          difficultyStats[dare.difficulty] = { total: 0, completed: 0, failed: 0 };
+        }
+        difficultyStats[dare.difficulty].total++;
+        if (dare.status === 'completed') difficultyStats[dare.difficulty].completed++;
+        if (dare.status === 'failed') difficultyStats[dare.difficulty].failed++;
+      });
+      
+      return {
+        totalDares,
+        completedDares,
+        failedDares,
+        pendingDares,
+        completionRate: totalDares > 0 ? Math.round((completedDares / totalDares) * 100) : 0,
+        categoryStats,
+        difficultyStats
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 };
 
 // Streak and Statistics Services
-export const statsService = {
+const statsService = {
   // Calculate and update user streak
   async updateUserStreak(userId) {
     try {
@@ -448,4 +619,13 @@ export const statsService = {
       throw error;
     }
   }
-}; 
+};
+
+module.exports = {
+  authService,
+  userService,
+  goalService,
+  groupService,
+  dareService,
+  statsService
+};

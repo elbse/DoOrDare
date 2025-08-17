@@ -1,52 +1,6 @@
 // Mock data
 const groupData = {
   name: "TheGoalGetters",
-  members: [
-    {
-      id: 1,
-      name: "Alex Chen",
-      initials: "AC",
-      status: "online",
-      goals: [
-        { id: 1, text: "Complete morning workout", completed: true, dueDate: "Today", category: "Fitness" },
-        { id: 2, text: "Read 30 pages of book", completed: false, dueDate: "Today", category: "Learning" },
-        { id: 3, text: "Meditate for 10 minutes", completed: true, dueDate: "Today", category: "Wellness" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Sarah Johnson",
-      initials: "SJ",
-      status: "online",
-      goals: [
-        { id: 4, text: "Drink 8 glasses of water", completed: false, dueDate: "Today", category: "Health" },
-        { id: 5, text: "Complete project proposal", completed: true, dueDate: "Today", category: "Work" },
-        { id: 6, text: "Call mom", completed: false, dueDate: "Today", category: "Personal" },
-      ],
-    },
-    {
-      id: 3,
-      name: "Jack Frost",
-      initials: "MR",   
-      status: "away",
-      goals: [
-        { id: 7, text: "Go for evening run", completed: true, dueDate: "Today", category: "Fitness" },
-        { id: 8, text: "Prepare healthy lunch", completed: true, dueDate: "Today", category: "Health" },
-        { id: 9, text: "Practice guitar", completed: false, dueDate: "Today", category: "Hobbies" },
-      ],
-    },
-    {
-      id: 4,
-      name: "Emma Wilson",
-      initials: "EW",
-      status: "offline",
-      goals: [
-        { id: 10, text: "Finish quarterly report", completed: false, dueDate: "Today", category: "Work" },
-        { id: 11, text: "Yoga session", completed: true, dueDate: "Today", category: "Fitness" },
-        { id: 12, text: "Plan weekend trip", completed: false, dueDate: "Today", category: "Personal" },
-      ],
-    },
-  ],
 }
 
 const dareOptions = [
