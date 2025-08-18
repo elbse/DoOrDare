@@ -45,14 +45,14 @@ import {
 } from "lucide-react";
 
 // Firebase imports
-const {
+import {
   authService,
   userService,
   goalService,
   groupService,
   dareService,
   statsService,
-} = require("../services/firebase");
+} from "../services/firebase";
 import AuthModal from "../components/AuthModal";
 import { auth, db } from "../firebase-config.js";
 import {

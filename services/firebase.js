@@ -1,4 +1,4 @@
-const { 
+import { 
   collection, 
   doc, 
   setDoc, 
@@ -12,16 +12,16 @@ const {
   onSnapshot,
   addDoc,
   serverTimestamp 
-} = require('firebase/firestore');
-const { 
+} from 'firebase/firestore';
+import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   signOut, 
   updateProfile,
   onAuthStateChanged 
-} = require('firebase/auth');
-const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
-const { auth, db, storage } = require('../firebase-config');
+} from 'firebase/auth';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { auth, db, storage } from '../firebase-config';
 
 // User Authentication Services
 const authService = {
@@ -621,7 +621,7 @@ const statsService = {
   }
 };
 
-module.exports = {
+export {
   authService,
   userService,
   goalService,
